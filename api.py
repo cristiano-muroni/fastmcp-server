@@ -26,15 +26,35 @@ gemini_client = genai.Client(
 class ChatRequest(BaseModel):
     mensagem: str
 
+@app.get("/teste")
+async def teste():
+    async with mcp_client:
+        result = await mcp_client.call_tool(
+            "soma",
+            {
+                "a": 10,
+                "b": 20
+            }
+        )
+    return result
+
 @app.post("/chat")
 async def chat(req: ChatRequest):
+    mensagem = req.mensagem.lower()
+
+    if "somar" in mensagem:
+        
+        async with mcp_client:
+            result = await mcp_client.call_tool(
+                "soma",
+                {"a": 10, "b": 20}
+            )
+
+        return result
 
     response = gemini_client.models.generate_content(
         model="gemini-2.5-flash",
         contents=req.mensagem
     )
 
-    return {
-        "pergunta": req.mensagem,
-        "resposta": response.text
-    }
+    return response.text

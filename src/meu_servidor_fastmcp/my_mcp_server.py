@@ -8,6 +8,9 @@ def greet(name: str) -> str:
 
 @mcp.tool
 def consultar_cliente(codigo: int) -> dict:
+    """
+    Retorna um cliente pelo código
+    """
     return {
         "codigo": codigo,
         "nome": "Ford",
@@ -16,6 +19,9 @@ def consultar_cliente(codigo: int) -> dict:
 
 @mcp.tool
 def soma(a: int, b: int) -> int:
+    """
+    Soma dois números inteiros
+    """
     return a + b
 
 
