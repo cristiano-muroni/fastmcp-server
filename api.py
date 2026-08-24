@@ -40,21 +40,39 @@ async def teste():
 
 @app.post("/chat")
 async def chat(req: ChatRequest):
-    mensagem = req.mensagem.lower()
 
-    if "somar" in mensagem:
-        
-        async with mcp_client:
-            result = await mcp_client.call_tool(
-                "soma",
-                {"a": 10, "b": 20}
-            )
+    async with mcp_client:
 
-        return result
+        tools = await mcp_client.list_tools()
 
-    response = gemini_client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=req.mensagem
-    )
+        prompt = f"""
+        Ferramentas disponíveis:
+
+        {tools}
+
+        Pergunta:
+        {req.mensagem}
+
+        Se alguma ferramenta for necessária,
+        responda apenas JSON:
+
+        {{
+          "tool": "...",
+          "args": {{}}
+        }}
+
+        Caso não precise de ferramenta:
+
+        {{
+          "tool": null
+        }}
+        """
+
+        decision = gemini_client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt
+        )
+
+        return decision.text
 
     return response.text
