@@ -4,6 +4,7 @@ from google import genai
 from fastmcp import Client
 from dotenv import load_dotenv
 import os
+import json
 
 load_dotenv()
 
@@ -71,8 +72,20 @@ async def chat(req: ChatRequest):
         decision = gemini_client.models.generate_content(
             model="gemini-2.5-flash",
             contents=prompt
+        )    
+
+        decision_text = (
+            decision.text
+            .replace("```json", "")
+            .replace("```", "")
+            .strip()
         )
 
-        return decision.text
+        decision_data = json.loads(decision_text)
 
-    return response.text
+        result = await mcp_client.call_tool(
+            decision_data["tool"],
+            decision_data["args"]
+        )
+
+        return result
