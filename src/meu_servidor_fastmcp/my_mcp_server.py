@@ -1,15 +1,20 @@
 from fastmcp import FastMCP
+import requests
 
 mcp = FastMCP("My MCP Server")
 
 @mcp.tool
 def greet(name: str) -> str:
+    """
+    Retorna uma saudação.
+    """
     return f"Hello, {name}!"
+
 
 @mcp.tool
 def consultar_cliente(codigo: int) -> dict:
     """
-    Retorna um cliente pelo código
+    Retorna um cliente pelo código.
     """
     return {
         "codigo": codigo,
@@ -17,12 +22,30 @@ def consultar_cliente(codigo: int) -> dict:
         "cidade": "Mogi-Guaçu"
     }
 
+
 @mcp.tool
-def soma(a: int, b: int) -> int:
+def postal_code(cep: str) -> dict:
     """
-    Soma dois números inteiros
+    Consulta a API ViaCEP e retorna os dados do endereço.
     """
-    return a + b
+
+    cep = cep.replace("-", "").strip()
+
+    response = requests.get(
+        f"https://viacep.com.br/ws/{cep}/json/",
+        timeout=10
+    )
+
+    response.raise_for_status()
+
+    data = response.json()
+
+    if data.get("erro"):
+        return {
+            "erro": "CEP não encontrado"
+        }
+
+    return data
 
 
 if __name__ == "__main__":
