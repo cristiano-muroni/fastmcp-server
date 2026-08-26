@@ -53,7 +53,7 @@ def to_check_cpf(texto: str) -> dict:
     }:
         return {
             "valid": False,
-            "cpf": cpf
+            "cpf": None
         }
 
     soma = 0
@@ -69,7 +69,7 @@ def to_check_cpf(texto: str) -> dict:
     if resto != int(cpf[9]):
         return {
             "valid": False,
-            "cpf": cpf
+            "cpf": None
         }
 
     soma = 0
@@ -85,7 +85,7 @@ def to_check_cpf(texto: str) -> dict:
     if resto != int(cpf[10]):
         return {
             "valid": False,
-            "cpf": cpf
+            "cpf": None
         }
 
     return {
