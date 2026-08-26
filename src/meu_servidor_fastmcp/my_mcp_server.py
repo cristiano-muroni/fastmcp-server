@@ -2,6 +2,7 @@ from fastmcp import FastMCP
 import requests
 import re
 
+
 mcp = FastMCP("My MCP Server")
 
 @mcp.tool
@@ -10,7 +11,6 @@ def greet(name: str) -> str:
     Retorna uma saudação.
     """
     return f"Hello, {name}!"
-
 
 @mcp.tool
 def get_client(codigo: int) -> dict:
@@ -30,7 +30,6 @@ def to_check_cpf(texto: str) -> dict:
     """
 
     cpf = re.sub(r"\D", "", texto)
-
     cpf = cpf[:11]
 
     if len(cpf) != 11:
@@ -92,7 +91,6 @@ def to_check_cpf(texto: str) -> dict:
         "valid": True,
         "cpf": cpf
     }
-
 
 @mcp.tool
 def postal_code(cep: str) -> dict:
