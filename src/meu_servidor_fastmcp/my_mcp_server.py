@@ -12,7 +12,7 @@ def greet(name: str) -> str:
 
 
 @mcp.tool
-def consultar_cliente(codigo: int) -> dict:
+def get_client(codigo: int) -> dict:
     """
     Retorna um cliente pelo código.
     """
@@ -26,7 +26,9 @@ def consultar_cliente(codigo: int) -> dict:
 @mcp.tool
 def postal_code(cep: str) -> dict:
     """
-    Consulta a API ViaCEP e retorna os dados do endereço.
+    Consulta um CEP brasileiro utilizando a API ViaCEP.
+    Retorna logradouro, bairro, cidade, estado, DDD e demais informações.
+    Use quando o usuário pedir informações de endereço ou informar um CEP.
     """
 
     cep = cep.replace("-", "").strip()
