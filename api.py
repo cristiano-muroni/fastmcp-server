@@ -1,11 +1,12 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-from google import genai
-from fastmcp import Client
-from dotenv import load_dotenv
-
-import os
 import json
+import os
+
+from dotenv import load_dotenv
+from fastapi import FastAPI
+from google import genai
+from pydantic import BaseModel
+
+from fastmcp import Client
 
 load_dotenv()
 
