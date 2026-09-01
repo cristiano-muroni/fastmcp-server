@@ -12,7 +12,7 @@ load_dotenv()
 
 app = FastAPI()
 
-mcp_client = Client("http://localhost:5000/mcp")
+mcp_client = Client(os.getenv("MCP_CLIENT_URL"))
 
 gemini_client = genai.Client(
     api_key=os.getenv("GEMINI_API_KEY")
