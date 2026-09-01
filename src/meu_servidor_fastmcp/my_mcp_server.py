@@ -1,7 +1,6 @@
-import requests
-
 from fastmcp import FastMCP
-from utils.cpf_validator import validate_cpf
+from services.cpf_validator import validate_cpf
+from services.via_cep_service import get_address_by_cep
 
 mcp = FastMCP("My MCP Server")
 
@@ -39,18 +38,7 @@ def postal_code(cep: str) -> dict:
     Use quando o usuário pedir informações de endereço ou informar um CEP.
     """
 
-    cep = cep.replace("-", "").strip()
-
-    response = requests.get(f"https://viacep.com.br/ws/{cep}/json/", timeout=10)
-
-    response.raise_for_status()
-
-    data = response.json()
-
-    if data.get("erro"):
-        return {"erro": "CEP não encontrado"}
-
-    return data
+    return get_address_by_cep(cep)
 
 
 if __name__ == "__main__":
