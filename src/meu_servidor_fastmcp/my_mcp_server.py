@@ -14,14 +14,6 @@ def greet(name: str) -> str:
 
 
 @mcp.tool
-def get_client(codigo: int) -> dict:
-    """
-    Retorna um cliente pelo código.
-    """
-    return {"codigo": codigo, "nome": "Ford", "cidade": "Mogi-Guaçu"}
-
-
-@mcp.tool
 def to_check_cpf(texto: str) -> dict:
     """
     Extrai e valida um CPF a partir de qualquer texto informado.
