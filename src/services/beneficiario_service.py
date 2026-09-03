@@ -1,6 +1,9 @@
 import sqlite3
+from pathlib import Path
 
-DB_PATH = "src/database/beneficiarios.db"
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+DB_PATH = BASE_DIR / "database" / "beneficiarios.db"
 
 
 def get_beneficiario(
