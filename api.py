@@ -50,12 +50,43 @@ Pergunta do usuário:
 
 {req.mensagem}
 
-Se alguma ferramenta for necessária, responda APENAS JSON válido:
+IMPORTANTE:
+
+Se o usuário solicitar informações sobre MAIS DE UM item,
+retorne uma lista de ferramentas.
+
+Exemplo:
 
 {{
-  "tool": "nome_da_tool",
+  "tools": [
+    {{
+      "tool": "beneficiary",
+      "args": {{
+        "matricula": "1002"
+      }}
+    }},
+    {{
+      "tool": "beneficiary",
+      "args": {{
+        "matricula": "1003"
+      }}
+    }}
+  ]
+}}
+
+Se for apenas uma consulta:
+
+{{
+  "tool": "beneficiary",
   "args": {{
+    "matricula": "1002"
   }}
+}}
+
+Se nenhuma ferramenta for necessária:
+
+{{
+  "tool": null
 }}
 
 Caso nenhuma ferramenta seja necessária, responda:
@@ -78,6 +109,8 @@ Caso nenhuma ferramenta seja necessária, responda:
         )
 
         try:
+            print("DECISION:")
+            print(decision_text)
             decision_data = json.loads(decision_text)
 
         except json.JSONDecodeError:
@@ -86,6 +119,8 @@ Caso nenhuma ferramenta seja necessária, responda:
                 model="gemini-2.5-flash",
                 contents=req.mensagem
             )
+            print("DECISION:")
+            print(decision_text)
 
             return {
                 "resposta": response.text
