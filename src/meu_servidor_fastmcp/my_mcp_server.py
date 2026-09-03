@@ -1,6 +1,7 @@
 from fastmcp import FastMCP
 from services.cpf_validator import validate_cpf
 from services.via_cep_service import get_address_by_cep
+from services.beneficiario_service import get_beneficiario
 
 mcp = FastMCP("My MCP Server")
 
@@ -31,6 +32,16 @@ def postal_code(cep: str) -> dict:
     """
 
     return get_address_by_cep(cep)
+
+
+@mcp.tool
+def beneficiary(id: int = None, matricula: str = None, nome: str = None) -> dict:
+    """
+    Consulta beneficiários por id,
+    matrícula ou nome.
+    """
+
+    return get_beneficiario(id=id, matricula=matricula, nome=nome)
 
 
 if __name__ == "__main__":
