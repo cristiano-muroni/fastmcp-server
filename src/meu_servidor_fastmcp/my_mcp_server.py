@@ -35,7 +35,7 @@ def postal_code(cep: str) -> dict:
 
 
 @mcp.tool
-def beneficiary(id: int | None = None, matricula: str | None = None, nome: str | None = None) -> list:
+def beneficiary(id: int | None = None, matricula: str | None = None, nome: str | None = None) -> dict | list:
     """
     Consulta beneficiários por id,
     matrícula ou nome.
