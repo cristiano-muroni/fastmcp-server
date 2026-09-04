@@ -14,9 +14,7 @@ app = FastAPI()
 
 mcp_client = Client(os.getenv("MCP_CLIENT_URL"))
 
-gemini_client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
+gemini_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 
 class ChatRequest(BaseModel):
@@ -36,7 +34,6 @@ async def tools():
 async def chat(req: ChatRequest):
 
     async with mcp_client:
-
         tools = await mcp_client.list_tools()
 
         prompt = f"""
@@ -88,63 +85,78 @@ Se nenhuma ferramenta for necessária:
 {{
   "tool": null
 }}
-
-Caso nenhuma ferramenta seja necessária, responda:
-
-{{
-  "tool": null
-}}
 """
 
         decision = gemini_client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt
+            model="gemini-2.5-flash", contents=prompt
         )
 
-        decision_text = (
-            decision.text
-            .replace("```json", "")
-            .replace("```", "")
-            .strip()
-        )
+        decision_text = decision.text.replace("```json", "").replace("```", "").strip()
+
+        print("DECISION:")
+        print(decision_text)
 
         try:
-            print("DECISION:")
-            print(decision_text)
             decision_data = json.loads(decision_text)
 
         except json.JSONDecodeError:
-
             response = gemini_client.models.generate_content(
-                model="gemini-2.5-flash",
-                contents=req.mensagem
+                model="gemini-2.5-flash", contents=req.mensagem
             )
-            print("DECISION:")
-            print(decision_text)
+
+            return {"resposta": response.text}
+
+        # -------------------------------------
+        # MÚLTIPLAS TOOLS
+        # -------------------------------------
+
+        tools_to_execute = decision_data.get("tools")
+
+        if tools_to_execute:
+            results = []
+
+            for item in tools_to_execute:
+                result = await mcp_client.call_tool(item["tool"], item.get("args", {}))
+
+                results.append({"tool": item["tool"], "resultado": result.data})
+
+            final_response = gemini_client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=f"""
+Pergunta original:
+
+{req.mensagem}
+
+Resultados das ferramentas:
+
+{results}
+
+Responda ao usuário de forma natural e amigável.
+""",
+            )
 
             return {
-                "resposta": response.text
+                "tools_utilizadas": [item["tool"] for item in tools_to_execute],
+                "resultados": results,
+                "resposta": final_response.text,
             }
+
+        # -------------------------------------
+        # TOOL ÚNICA
+        # -------------------------------------
 
         tool_name = decision_data.get("tool")
 
         if tool_name is None:
-
             response = gemini_client.models.generate_content(
-                model="gemini-2.5-flash",
-                contents=req.mensagem
+                model="gemini-2.5-flash", contents=req.mensagem
             )
 
-            return {
-                "resposta": response.text
-            }
+            return {"resposta": response.text}
 
         args = decision_data.get("args", {})
 
-        tool_result = await mcp_client.call_tool(
-            tool_name,
-            args
-        )
+        tool_result = await mcp_client.call_tool(tool_name, args)
 
         final_response = gemini_client.models.generate_content(
             model="gemini-2.5-flash",
@@ -158,11 +170,11 @@ Resultado obtido da ferramenta:
 {tool_result.data}
 
 Responda ao usuário de forma natural e amigável.
-"""
+""",
         )
 
         return {
             "tool_utilizada": tool_name,
             "resultado_tool": tool_result.data,
-            "resposta": final_response.text
+            "resposta": final_response.text,
         }
