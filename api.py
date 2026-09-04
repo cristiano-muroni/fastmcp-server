@@ -7,6 +7,7 @@ from google import genai
 from pydantic import BaseModel
 
 from fastmcp import Client
+from prompts.tool_selection_prompt import TOOL_SELECTION_PROMPT
 
 load_dotenv()
 
@@ -36,62 +37,13 @@ async def chat(req: ChatRequest):
     async with mcp_client:
         tools = await mcp_client.list_tools()
 
-        prompt = f"""
-Você é um agente que decide quando utilizar ferramentas.
-
-Ferramentas disponíveis:
-
-{tools}
-
-Pergunta do usuário:
-
-{req.mensagem}
-
-IMPORTANTE:
-
-Se o usuário solicitar informações sobre MAIS DE UM item,
-retorne uma lista de ferramentas.
-
-Exemplo:
-
-{{
-  "tools": [
-    {{
-      "tool": "beneficiary",
-      "args": {{
-        "matricula": "1002"
-      }}
-    }},
-    {{
-      "tool": "beneficiary",
-      "args": {{
-        "matricula": "1003"
-      }}
-    }}
-  ]
-}}
-
-Se for apenas uma consulta:
-
-{{
-  "tool": "beneficiary",
-  "args": {{
-    "matricula": "1002"
-  }}
-}}
-
-Se nenhuma ferramenta for necessária:
-
-{{
-  "tool": null
-}}
-"""
+        prompt = TOOL_SELECTION_PROMPT.format(tools=tools, message=req.mensagem)
 
         decision = gemini_client.models.generate_content(
             model="gemini-2.5-flash", contents=prompt
         )
 
-        decision_text = decision.text.replace("```json", "").replace("```", "").strip()       
+        decision_text = decision.text.replace("```json", "").replace("```", "").strip()
 
         try:
             decision_data = json.loads(decision_text)
