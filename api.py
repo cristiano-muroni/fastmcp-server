@@ -91,10 +91,7 @@ Se nenhuma ferramenta for necessária:
             model="gemini-2.5-flash", contents=prompt
         )
 
-        decision_text = decision.text.replace("```json", "").replace("```", "").strip()
-
-        print("DECISION:")
-        print(decision_text)
+        decision_text = decision.text.replace("```json", "").replace("```", "").strip()       
 
         try:
             decision_data = json.loads(decision_text)
