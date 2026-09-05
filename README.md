@@ -1,4 +1,4 @@
-# FastMCP Agent com Gemini, MCP e SQLite
+# MCP Agent com Gemini, FastMCP e SQLite
 
 Projeto de estudo e experimentação utilizando:
 
