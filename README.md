@@ -30,10 +30,30 @@ Ou:
 uv sync
 ```
 # Variáveis de ambiente
+
 Criar um arquivo .env
+
 ```text
 GEMINI_API_KEY=sua_chave
 MCP_CLIENT_URL=http://127.0.0.1:5000/mcp
+```
+# Executando o MCP Server
+```bash
+python src/meu_servidor_fastmcp/my_mcp_server.py
+```
+
+Servidor:
+```bash
+http://127.0.0.1:5000/mcp
+```
+
+# Executando a API (client)
+```bash
+uvicorn api:app --reload --port 8000
+```
+Swagger:
+```bash
+http://127.0.0.1:8000/docs
 ```
 # Arquitetura
 
@@ -94,3 +114,13 @@ fastmcp/
 ├── .gitignore
 └── README.md
 ```
+# Objetivo do Projeto
+
+**Este projeto tem finalidade educacional e demonstra:**
+
+- Uso de MCP (Model Context Protocol)
+- Seleção dinâmica de ferramentas por LLM
+- Integração com APIs externas
+- Consulta a banco de dados SQLite
+- Arquitetura baseada em serviços
+- Suporte a múltiplas ferramentas em uma única solicitação
