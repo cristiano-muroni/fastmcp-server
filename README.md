@@ -12,6 +12,24 @@ O objetivo é permitir que o Gemini analise a solicitação do usuário, selecio
 
 ---
 
+# Instalação
+## Criar ambiente virtual
+```bash
+python -m venv .venv
+```
+Ativar:
+```bash
+.venv\Scripts\activate
+```
+# Instalar dependências
+```bash
+pip install -r requirements.txt
+```
+Ou:
+```bash
+uv sync
+```
+
 # Arquitetura
 
 ```text
