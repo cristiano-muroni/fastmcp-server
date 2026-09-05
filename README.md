@@ -44,3 +44,30 @@ Gemini
    │
    ▼
 Resposta Final
+```
+# Estrutura do projeto
+```text
+fastmcp/
+│
+├── api.py
+│
+├── src/
+│   │
+│   ├── database/
+│   │   └── beneficiarios.db
+│   │
+│   ├── prompts/
+│   │   └── tool_selection_prompt.py
+│   │
+│   ├── services/
+│   │   ├── beneficiario_service.py
+│   │   ├── cpf_validator.py
+│   │   └── via_cep_service.py
+│   │
+│   └── meu_servidor_fastmcp/
+│       └── my_mcp_server.py
+│
+├── .env
+├── .gitignore
+└── README.md
+```
