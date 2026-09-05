@@ -124,3 +124,13 @@ fastmcp/
 - Consulta a banco de dados SQLite
 - Arquitetura baseada em serviços
 - Suporte a múltiplas ferramentas em uma única solicitação
+
+### Tecnologias Utilizadas
+- Python 3.14
+- FastAPI
+- FastMCP
+- Google Gemini
+- SQLite
+- Pydantic
+- Uvicorn
+- Requests
