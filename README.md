@@ -29,7 +29,12 @@ Ou:
 ```bash
 uv sync
 ```
-
+# Variáveis de ambiente
+Criar um arquivo .env
+```text
+GEMINI_API_KEY=sua_chave
+MCP_CLIENT_URL=http://127.0.0.1:5000/mcp
+```
 # Arquitetura
 
 ```text
